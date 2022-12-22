@@ -1,0 +1,44 @@
+{
+  "name": "chart-hill",
+  "version": "0.1.0",
+  "description": "Chart component library for Vue 3.",
+  "private": true,
+  "main": "dist/library.js",
+  "module": "dist/library.mjs",
+  "files": [
+    "dist/*"
+  ],
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rollup -c",
+    "dev": "rollup -c -w"
+  },
+  "keywords": [
+    "vue",
+    "chart",
+    "library"
+  ],
+  "author": "Travis Horn <travis@travishorn.com> (https://travishorn.com/)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/travishorn/chart-hill.git"
+  },
+  "bugs": {
+    "url": "https://github.com/travishorn/chart-hill/issues"
+  },
+  "homepage": "https://github.com/travishorn/chart-hill#readme",
+  "peerDependencies": {
+    "d3-array": "^3.2.1",
+    "d3-scale": "^4.0.2",
+    "d3-selection": "^3.0.0",
+    "d3-shape": "^3.2.0",
+    "vue": "^3.2.45"
+  },
+  "devDependencies": {
+    "rollup": "^3.8.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-vue": "^6.0.0"
+  }
+}
