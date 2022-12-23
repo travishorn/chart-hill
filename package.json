@@ -30,7 +30,6 @@
   },
   "homepage": "https://github.com/travishorn/chart-hill#readme",
   "peerDependencies": {
-    "d3-array": "^3.2.1",
     "d3-scale": "^4.0.2",
     "d3-selection": "^3.0.0",
     "d3-shape": "^3.2.0",
