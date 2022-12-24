@@ -1,9 +1,9 @@
 import Gauge from "./Gauge.vue";
-import Line from "./Line.vue";
+import TimeLine from "./TimeLine.vue";
 
 export default {
   install (Vue) {
     Vue.component("ch-gauge", Gauge);
-    Vue.component("ch-line", Line);
+    Vue.component("ch-time-line", TimeLine);
   },
 };

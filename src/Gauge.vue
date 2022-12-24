@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, watch } from "vue";
 import { scaleLinear } from "d3-scale";
+import { schemeCategory10 } from "d3-scale-chromatic";
 import { select } from "d3-selection";
 import { arc } from "d3-shape";
 
@@ -19,7 +20,7 @@ const props = defineProps({
   },
   barColor: {
     type: String,
-    default: "#106cde",
+    default: schemeCategory10[0],
   }
 });
 
@@ -38,7 +39,7 @@ let labelMin;
 let labelMax;
 let labelValue;
 
-const valueArc = arc()
+const arcGenerator = arc()
   .innerRadius(height - fontSize - barWidth)
   .outerRadius(height - fontSize - 10)
   .startAngle(scale(0))
@@ -52,67 +53,59 @@ const valueArc = arc()
 onMounted(() => {
   chart = select(`#${chartId}`);
 
-  valueBar = chart.selectAll("path.valueBar")
-    .data([props.value])
-    .join("path")
-      .attr("class", "valueBar")
-      .attr("transform", `translate(${width / 2}, ${height - fontSize})`)
-      .attr("fill", props.barColor);
+  guideBar = chart.append("path")
+    .attr("class", "guideBar")
+    .attr("d", arc()
+      .innerRadius(height - fontSize - 5)
+      .outerRadius(height - fontSize)
+      .startAngle(scale(0))
+      .endAngle(scale(1))
+    )
+    .attr("transform", `translate(${width / 2}, ${height - fontSize})`)
+    .attr("fill", props.barColor);
 
-  labelMin = chart.selectAll("text.label-min")
-    .data([props.min])
-    .join("text")
-      .attr("class", "label-min")
-      .attr("text-anchor", "middle")
-      .attr("font-family", "sans-serif")
-      .attr("font-size", fontSize)
-      .attr("fill", "currentColor")
-      .attr(
-        "transform",
-        `translate(${barWidth / 2 + fontSize} ${height - 5})`
-      );
+  valueBar = chart.append("path")
+    .datum(props.value)
+    .attr("class", "valueBar")
+    .attr("transform", `translate(${width / 2}, ${height - fontSize})`)
+    .attr("fill", props.barColor)
+    .attr("d", arcGenerator);
 
-  labelMax = chart.selectAll("text.label-max")
-    .data([props.max])
-    .join("text")
-      .attr("class", "label-max")
-      .attr("text-anchor", "middle")
-      .attr("font-family", "sans-serif")
-      .attr("font-size", fontSize)
-      .attr("fill", "currentColor")
-      .attr(
-        "transform",
-        `translate(${width - (barWidth / 2 + fontSize)} ${height - 5})`
-      );
+  labelMin = chart.append("text")
+    .datum(props.min)
+    .attr("class", "label-min")
+    .attr("text-anchor", "middle")
+    .attr("font-family", "sans-serif")
+    .attr("font-size", fontSize)
+    .attr("fill", "currentColor")
+    .attr(
+      "transform",
+      `translate(${barWidth / 2 + fontSize} ${height - 5})`
+    )
+    .text(props.min);
 
-  labelValue = chart.selectAll("text.label-value")
-    .data([props.value])
-    .join("text")
-      .attr("class", "label-value")
-      .attr("text-anchor", "middle")
-      .attr("font-family", "sans-serif")
-      .attr("font-size", fontSize * 3)
-      .attr("fill", "currentColor")
-      .attr("transform", `translate(${width / 2} ${height / 2 + barWidth})`);
+  labelMax = chart.append("text")
+    .datum(props.max)
+    .attr("class", "label-max")
+    .attr("text-anchor", "middle")
+    .attr("font-family", "sans-serif")
+    .attr("font-size", fontSize)
+    .attr("fill", "currentColor")
+    .attr(
+      "transform",
+      `translate(${width - (barWidth / 2 + fontSize)} ${height - 5})`
+    )
+    .text(props.max);
 
-  guideBar = chart.selectAll("path.guideBar")
-    .data([props.max])
-    .join("path")
-      .attr("class", "guideBar")
-      .attr("d", arc()
-        .innerRadius(height - fontSize - 5)
-        .outerRadius(height - fontSize)
-        .startAngle(scale(0))
-        .endAngle(scale(1))
-      )
-      .attr("transform", `translate(${width / 2}, ${height - fontSize})`);
-
-  guideBar.attr("fill", props.barColor);
-  valueBar.attr("fill", props.barColor);
-  valueBar.attr("d", valueArc);
-  labelMin.text(props.min);
-  labelMax.text(props.max);
-  labelValue.text(props.value);
+  labelValue = chart.append("text")
+    .datum(props.value)
+    .attr("class", "label-value")
+    .attr("text-anchor", "middle")
+    .attr("font-family", "sans-serif")
+    .attr("font-size", fontSize * 3)
+    .attr("fill", "currentColor")
+    .attr("transform", `translate(${width / 2} ${height / 2 + barWidth})`)
+    .text(props.value);
 });
 
 watch(() => props.barColor, () => {
@@ -121,17 +114,17 @@ watch(() => props.barColor, () => {
 });
 
 watch(() => props.value, () => {
-  valueBar.attr("d", valueArc);
+  valueBar.attr("d", arcGenerator);
   labelValue.text(props.value);
 });
 
 watch(() => props.min, () => {
-  valueBar.attr("d", valueArc);
+  valueBar.attr("d", arcGenerator);
   labelMin.text(props.min);
 });
 
 watch(() => props.max, () => {
-  valueBar.attr("d", valueArc);
+  valueBar.attr("d", arcGenerator);
   labelMax.text(props.max);
 });
 </script>
