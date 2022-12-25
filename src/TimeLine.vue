@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, watch } from "vue";
-import { extent, max, ticks } from "d3-array";
+import { extent, max } from "d3-array";
 import { axisBottom, axisLeft } from "d3-axis";
 import { select } from "d3-selection";
 import { line } from "d3-shape";
